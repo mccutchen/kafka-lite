@@ -10,19 +10,6 @@ Docker image, forked from [mvillarrealb/kafka-lite].
 Images are available at [mccutchen/kafka-lite] on Docker Hub, tagged with
 specific Kafka versions.
 
-## Building and releasing
-
-```sh
-# Build an image tagged with the latest git commit
-make
-
-# Build an image tagged with latest
-make VERSION=latest
-
-# Build and push an image tagged with latest
-make release VERSION=latest
-```
-
 ## Usage
 
 ```sh
@@ -40,7 +27,20 @@ services:
       - 9092:9092 # Kafka port
       - 2181:2181 # Zookeeper port
     volumes:
-      - /tmp/kafka-data:/var/kafka/logs
+      - kafka-data:/var/lib/kafka/data
+```
+
+## Building and releasing
+
+```sh
+# Build an image tagged with the latest git commit
+make
+
+# Build an image tagged with latest
+make VERSION=latest
+
+# Build and push an image tagged with latest
+make release VERSION=latest
 ```
 
 ## Credits
