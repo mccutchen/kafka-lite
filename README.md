@@ -27,7 +27,7 @@ services:
       - 9092:9092 # Kafka port
       - 2181:2181 # Zookeeper port
     volumes:
-      - /tmp/kafka-data:/var/kafka/logs
+      - kafka-data:/var/lib/kafka/data
 ```
 
 ## Building and releasing
