@@ -1,6 +1,7 @@
-KAFKA_VERSION ?= $(shell grep KAFKA_VERSION VERSIONS | cut -d= -f2)
-SCALA_VERSION ?= $(shell grep SCALA_VERSION VERSIONS | cut -d= -f2)
-DOCKER_TAG    ?= mccutchen/kafka-lite:$(KAFKA_VERSION)-scala$(SCALA_VERSION)
+KAFKA_VERSION    ?= $(shell grep KAFKA_VERSION VERSIONS | cut -d= -f2)
+SCALA_VERSION    ?= $(shell grep SCALA_VERSION VERSIONS | cut -d= -f2)
+RELEASE_REVISION ?= $(shell git rev-parse --short HEAD)
+DOCKER_TAG       ?= mccutchen/kafka-lite:$(KAFKA_VERSION)-scala$(SCALA_VERSION)-rev$(RELEASE_REVISION)
 
 build:
 	DOCKER_BUILDKIT=1 docker build \
