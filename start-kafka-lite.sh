@@ -14,7 +14,7 @@ transaction.state.log.min.isr=1
 EOL
 
 cat > ./zookeeper.properties <<EOL
-dataDir=$ZOOKEEPER_DATA_DIR
+dataDir=/tmp/zookeeper
 clientPort=$ZOOKEEPER_PORT
 maxClientCnxns=0
 admin.enableServer=false

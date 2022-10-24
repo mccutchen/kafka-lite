@@ -11,9 +11,9 @@ ARG KAFKA_TARBALL=https://downloads.apache.org/kafka/${KAFKA_VERSION}/kafka_${SC
 ENV KAFKA_USER=kafka \
     KAFKA_GROUP=kafka \
     KAFKA_HOME=/opt/kafka/ \
-    KAFKA_LOGS_DIR=/var/lib/kafka/data \
-    KAFKA_PORT=9092 \
-    ZOOKEEPER_DATA_DIR=/var/lib/zookeeper/data \
+    KAFKA_LOGS_DIR=/var/lib/kafka/logs
+
+ENV KAFKA_PORT=9092 \
     ZOOKEEPER_PORT=2181
 
 RUN apk add --no-cache bash curl openjdk17-jre-headless supervisor
@@ -31,7 +31,6 @@ COPY start-kafka-lite.sh ${KAFKA_HOME}
 COPY supervisord.conf /etc/supervisord.conf
 
 VOLUME ${KAFKA_LOGS_DIR}
-VOLUME ${ZOOKEEPER_DATA_DIR}
 
 EXPOSE ${KAFKA_PORT}
 EXPOSE ${ZOOKEEPER_PORT}
