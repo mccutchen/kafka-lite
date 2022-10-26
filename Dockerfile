@@ -23,6 +23,10 @@ ENV KAFKA_CLUSTER_ID=MDAwMDAwMDAtMDAwMC0wMD \
     ZOOKEEPER_PORT=2181 \
     LOG_DIR=/var/log/kafka
 
+# By default, the entire container will exit if any component fails. Set this
+# to false or 0 to leave the container running for debugging purposes.
+ENV EXIT_ON_FAILURE=true
+
 RUN addgroup kafka \
     && adduser -D -s /bin/bash -G kafka kafka \
     && mkdir -p ${KAFKA_DATA_DIR} \
@@ -33,7 +37,7 @@ RUN addgroup kafka \
     && chown -R kafka:kafka ${LOG_DIR}
 
 WORKDIR /home/kafka
-COPY start-kafka-lite.sh .
+COPY start-kafka-lite.sh eventlistener.py ./
 COPY supervisord.conf /etc/supervisord.conf
 
 VOLUME ${KAFKA_DATA_DIR}
