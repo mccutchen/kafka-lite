@@ -32,15 +32,15 @@ services:
 
 ## Building and releasing
 
+See [VERSIONS](./VERSIONS) for build parameters.  Before releasing a new
+version, bump the `RELEASE_REVISION` number.
+
 ```sh
-# Build an image tagged with the latest git commit
+# Build an image locally
 make
 
-# Build an image tagged with latest
-make VERSION=latest
-
-# Build and push an image tagged with latest
-make release VERSION=latest
+# Build and push a "release" image, which will produce a multi-arch image
+make release
 ```
 
 ## Credits
