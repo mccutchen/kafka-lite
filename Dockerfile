@@ -8,34 +8,35 @@ ARG KAFKA_VERSION
 ARG SCALA_VERSION
 ARG KAFKA_TARBALL=https://downloads.apache.org/kafka/${KAFKA_VERSION}/kafka_${SCALA_VERSION}-${KAFKA_VERSION}.tgz
 
-ENV KAFKA_USER=kafka \
-    KAFKA_GROUP=kafka \
-    KAFKA_HOME=/opt/kafka/ \
-    KAFKA_LOGS_DIR=/var/lib/kafka/logs
+RUN apk add --no-cache bash curl openjdk17-jre-headless supervisor \
+    && mkdir -p /opt/kafka \
+    && curl -sSL ${KAFKA_TARBALL} | tar -zxv -C /opt/kafka --strip-components=1
 
-ENV KAFKA_PORT=9092 \
-    ZOOKEEPER_PORT=2181
+ENV PATH=/opt/kafka/bin:${PATH}
 
-RUN apk add --no-cache bash curl openjdk17-jre-headless supervisor
+# Note: Default KAFKA_CLUSTER_ID generated like so:
+# echo "00000000-0000-0000-0000-000000000000" | base64 | cut -b 1-22
+ENV KAFKA_CLUSTER_ID=MDAwMDAwMDAtMDAwMC0wMD \
+    KAFKA_DATA_DIR=/var/lib/kafka/data \
+    KAFKA_PORT=9092 \
+    ZOOKEEPER_PORT=2181 \
+    LOG_DIR=/var/log/kafka
 
-RUN addgroup ${KAFKA_GROUP} && \
-    adduser -h ${KAFKA_HOME} -D -s /bin/bash -G ${KAFKA_GROUP} ${KAFKA_USER} && \
-    mkdir -p ${KAFKA_HOME} && \
-    mkdir -p ${KAFKA_LOGS_DIR} && \
-    chown -R ${KAFKA_USER}:${KAFKA_GROUP} ${KAFKA_HOME} ${KAFKA_HOME} && \
-    chown -R ${KAFKA_USER}:${KAFKA_GROUP} ${KAFKA_LOGS_DIR}
+RUN addgroup kafka \
+    && adduser -D -s /bin/bash -G kafka kafka \
+    && mkdir -p ${KAFKA_DATA_DIR} \
+    && mkdir -p ${LOG_DIR} \
+    && chown -R kafka:kafka ${KAFKA_DATA_DIR} \
+    && chown -R kafka:kafka ${LOG_DIR}
 
-RUN curl -sSL ${KAFKA_TARBALL} | tar -zxv -C ${KAFKA_HOME} --strip-components=1
-
-COPY start-kafka-lite.sh ${KAFKA_HOME}
+WORKDIR /home/kafka
+COPY start-kafka-lite.sh .
 COPY supervisord.conf /etc/supervisord.conf
 
-VOLUME ${KAFKA_LOGS_DIR}
+VOLUME ${KAFKA_DATA_DIR}
 
 EXPOSE ${KAFKA_PORT}
 EXPOSE ${ZOOKEEPER_PORT}
 
-USER ${KAFKA_USER}
-WORKDIR ${KAFKA_HOME}
-
+USER kafka
 CMD ["./start-kafka-lite.sh"]
