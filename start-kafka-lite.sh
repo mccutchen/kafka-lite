@@ -12,7 +12,8 @@ transaction.state.log.min.isr=1
 EOL
 
 cat > ./zookeeper.properties <<EOL
-dataDir=/tmp/zookeeper
+cluster.id=$KAFKA_CLUSTER_ID
+dataDir=$ZOOKEEPER_DATA_DIR
 clientPort=$ZOOKEEPER_PORT
 maxClientCnxns=0
 admin.enableServer=false

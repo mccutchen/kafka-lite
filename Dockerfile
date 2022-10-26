@@ -19,14 +19,17 @@ ENV PATH=/opt/kafka/bin:${PATH}
 ENV KAFKA_CLUSTER_ID=MDAwMDAwMDAtMDAwMC0wMD \
     KAFKA_DATA_DIR=/var/lib/kafka/data \
     KAFKA_PORT=9092 \
+    ZOOKEEPER_DATA_DIR=/var/lib/zookeeper/data \
     ZOOKEEPER_PORT=2181 \
     LOG_DIR=/var/log/kafka
 
 RUN addgroup kafka \
     && adduser -D -s /bin/bash -G kafka kafka \
     && mkdir -p ${KAFKA_DATA_DIR} \
+    && mkdir -p ${ZOOKEEPER_DATA_DIR} \
     && mkdir -p ${LOG_DIR} \
     && chown -R kafka:kafka ${KAFKA_DATA_DIR} \
+    && chown -R kafka:kafka ${ZOOKEEPER_DATA_DIR} \
     && chown -R kafka:kafka ${LOG_DIR}
 
 WORKDIR /home/kafka
@@ -34,6 +37,7 @@ COPY start-kafka-lite.sh .
 COPY supervisord.conf /etc/supervisord.conf
 
 VOLUME ${KAFKA_DATA_DIR}
+VOLUME ${ZOOKEEPER_DATA_DIR}
 
 EXPOSE ${KAFKA_PORT}
 EXPOSE ${ZOOKEEPER_PORT}
