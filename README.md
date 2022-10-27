@@ -19,7 +19,8 @@ docker run --rm -P mccutchen/kafka-lite
 Or, using docker-compose:
 
 ```yaml
-version: '3.1'
+version: "3"
+
 services:
   kafka:
     image: mccutchen/kafka-lite
@@ -28,6 +29,13 @@ services:
       - 2181:2181 # Zookeeper port
     volumes:
       - kafka-data:/var/lib/kafka/data
+      - zk-data:/var/lib/zookeeper/data
+
+volumes:
+  kafka-data:
+    external: false
+  zk-data:
+    external: false
 ```
 
 ## Building and releasing
@@ -47,9 +55,10 @@ make release
 
 As noted above, this repo is based on [mvillarrealb/kafka-lite]. Differences
 from the upstream image:
-- No kafka-connect
-- Builds on arm64 (e.g. M1 Macs)
+- Multi-arch amd64 & arm64 builds for Apple Silicon compatibility
 - Uses non-deprecated JVM
+- No kafka-connect
+- Container exits by default if any component fails (override with `EXIT_ON_FAILURE=false`)
 
 
 [mccutchen/kafka-lite]: https://hub.docker.com/r/mccutchen/kafka-lite
