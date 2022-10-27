@@ -15,10 +15,6 @@ jobs:
   docker:
     runs-on: ubuntu-latest
 
-    permissions:
-      contents: read
-      packages: write
-
     steps:
       - name: Check out the repo
         uses: actions/checkout@v3
@@ -35,20 +31,11 @@ jobs:
           username: mccutchen
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-      - name: Login to GitHub Container Registry
-        uses: docker/login-action@v2
-        with:
-          registry: ghcr.io
-          username: mccutchen
-          password: ${{ secrets.GITHUB_TOKEN }}
-
       - name: Extract metadata for Docker
         id: meta
         uses: docker/metadata-action@v4
         with:
-          images: |
-            mccutchen/kafka-lite
-            ghrc.io/mccutchen/kafka-lite
+          images: mccutchen/kafka-lite
 
       - name: Compute build args
         id: args
