@@ -47,10 +47,20 @@ jobs:
 
       - name: Compute build args
         id: args
+        # We have two build arguments to pass into the build-args argument to
+        # the docker/build-and-push step below, and that argument expects a
+        # multi-line string.
+        #
+        # Here we attempt to hack a multi-line string value into a single
+        # output variable following this example from GitHub's docs:
+        # https://docs.github.com/en/actions/using-workflows/workflow-commands-for-github-actions#multiline-strings
+        #
+        # That example covers $GITHUB_ENV, I have no idea if it works with
+        # $GITHUB_OUTPUT.
         run: |
-          build_args="$(grep KAFKA_VERSION VERSIONS)"
-          build_args="${build_args},$(grep SCALA_VERSION VERSIONS)"
-          echo "build_args=$build_args" >> $GITHUB_OUTPUT
+          echo 'build_args<<EOF' >> $GITHUB_OUTPUT
+          grep -e KAFKA_VERSION -e SCALA_VERSION VERSIONS >> $GITHUB_OUTPUT
+          echo 'EOF' >> $GITHUB_OUTPUT
 
       - name: Build and push
         uses: docker/build-push-action@v3
