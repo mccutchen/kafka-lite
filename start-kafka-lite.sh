@@ -1,6 +1,7 @@
 #!/bin/bash
 
 cat > ./kafka.properties <<EOL
+authorizer.class.name=kafka.security.authorizer.AclAuthorizer
 broker.id=1
 cluster.id=$KAFKA_CLUSTER_ID
 listeners=PLAINTEXT://:$KAFKA_PORT
