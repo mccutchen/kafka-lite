@@ -6,7 +6,7 @@ FROM alpine:3.16
 # Scala versions with which they are built.
 ARG KAFKA_VERSION
 ARG SCALA_VERSION
-ARG KAFKA_TARBALL=https://downloads.apache.org/kafka/${KAFKA_VERSION}/kafka_${SCALA_VERSION}-${KAFKA_VERSION}.tgz
+ARG KAFKA_TARBALL=https://archive.apache.org/dist/kafka/${KAFKA_VERSION}/kafka_${SCALA_VERSION}-${KAFKA_VERSION}.tgz
 
 RUN apk add --no-cache bash curl openjdk17-jre-headless supervisor \
     && mkdir -p /opt/kafka \
