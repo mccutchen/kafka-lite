@@ -13,8 +13,9 @@ transaction.state.log.min.isr=1
 EOL
 
 if [ "$KAFKA_ENABLE_SASL" ]; then
+echo "enable sasl"
     cat >> ./kafka.properties <<EOL
-listeners=SASL_PLAINTEXT://:$KAFKA_PORT
+listeners=SASL_PLAINTEXT://:$KAFKA_PORT,PLAINTEXT://:$KAFKA_NOAUTH_PORT
 super.users=User:admin
 sasl.enabled.mechanisms=PLAIN
 security.inter.broker.protocol=SASL_PLAINTEXT

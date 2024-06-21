@@ -18,7 +18,8 @@ ENV PATH=/opt/kafka/bin:${PATH}
 # echo "00000000-0000-0000-0000-000000000000" | base64 | cut -b 1-22
 ENV KAFKA_CLUSTER_ID=MDAwMDAwMDAtMDAwMC0wMD \
     KAFKA_DATA_DIR=/var/lib/kafka/data \
-    KAFKA_PORT=9092 \
+    KAFKA_NOAUTH_PORT=9092 \
+    KAFKA_PORT=9093 \
     ZOOKEEPER_DATA_DIR=/var/lib/zookeeper/data \
     ZOOKEEPER_PORT=2181 \
     LOG_DIR=/var/log/kafka
@@ -26,6 +27,8 @@ ENV KAFKA_CLUSTER_ID=MDAwMDAwMDAtMDAwMC0wMD \
 # By default, the entire container will exit if any component fails. Set this
 # to false or 0 to leave the container running for debugging purposes.
 ENV EXIT_ON_FAILURE=true
+#enable sasl for dev clusters
+ENV KAFKA_ENABLE_SASL=""
 
 RUN addgroup kafka \
     && adduser -D -s /bin/bash -G kafka kafka \
@@ -45,6 +48,7 @@ VOLUME ${ZOOKEEPER_DATA_DIR}
 
 EXPOSE ${KAFKA_PORT}
 EXPOSE ${ZOOKEEPER_PORT}
+EXPOsE ${KAFKA_NOAUTH_PORT}
 
 USER kafka
 CMD ["./start-kafka-lite.sh"]
