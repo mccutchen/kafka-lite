@@ -24,8 +24,9 @@ cat > ./kafka_jaas.conf <<EOL
 KafkaServer {
   org.apache.kafka.common.security.plain.PlainLoginModule required
   username="admin"
-  password="admin-secret"
-  user_admin="admin-secret";
+  password="admin"
+  user_admin="admin"
+  user_user="user";
 };
 
 EOL
