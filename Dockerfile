@@ -27,8 +27,6 @@ ENV KAFKA_CLUSTER_ID=MDAwMDAwMDAtMDAwMC0wMD \
 # By default, the entire container will exit if any component fails. Set this
 # to false or 0 to leave the container running for debugging purposes.
 ENV EXIT_ON_FAILURE=true
-#enable sasl for dev clusters
-ENV KAFKA_ENABLE_SASL=""
 
 RUN addgroup kafka \
     && adduser -D -s /bin/bash -G kafka kafka \
@@ -48,7 +46,7 @@ VOLUME ${ZOOKEEPER_DATA_DIR}
 
 EXPOSE ${KAFKA_PORT}
 EXPOSE ${ZOOKEEPER_PORT}
-EXPOsE ${KAFKA_NOAUTH_PORT}
+EXPOSE ${KAFKA_NOAUTH_PORT}
 
 USER kafka
 CMD ["./start-kafka-lite.sh"]

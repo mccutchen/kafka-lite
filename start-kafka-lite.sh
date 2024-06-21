@@ -1,6 +1,7 @@
 #!/bin/bash
 
 # Create Kafka properties file
+echo "enable SASL and  PLAINTEXT authentication"
 cat > ./kafka.properties <<EOL
 authorizer.class.name=kafka.security.authorizer.AclAuthorizer
 broker.id=1
@@ -10,11 +11,6 @@ log.dirs=$KAFKA_DATA_DIR
 offsets.topic.replication.factor=1
 transaction.state.log.replication.factor=1
 transaction.state.log.min.isr=1
-EOL
-
-if [ "$KAFKA_ENABLE_SASL" ]; then
-echo "enable sasl"
-    cat >> ./kafka.properties <<EOL
 listeners=SASL_PLAINTEXT://:$KAFKA_PORT,PLAINTEXT://:$KAFKA_NOAUTH_PORT
 super.users=User:admin
 sasl.enabled.mechanisms=PLAIN
@@ -35,12 +31,6 @@ KafkaServer {
 EOL
 # Export JAAS configuration file location
 export KAFKA_OPTS="-Djava.security.auth.login.config=/home/kafka/kafka_jaas.conf"
-    
-else
-cat >> ./kafka.properties <<EOL
-listeners=PLAINTEXT://:$KAFKA_PORT
-EOL
-fi
 
 cat > ./zookeeper.properties <<EOL
 cluster.id=$KAFKA_CLUSTER_ID
