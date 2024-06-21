@@ -1,7 +1,6 @@
 #!/bin/bash
 
 # Create Kafka properties file
-echo "enable SASL and  PLAINTEXT authentication"
 cat > ./kafka.properties <<EOL
 authorizer.class.name=kafka.security.authorizer.AclAuthorizer
 broker.id=1
