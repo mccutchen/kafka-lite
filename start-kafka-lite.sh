@@ -16,7 +16,6 @@ super.users=User:admin
 sasl.enabled.mechanisms=PLAIN
 security.inter.broker.protocol=SASL_PLAINTEXT
 sasl.mechanism.inter.broker.protocol=PLAIN
-
 EOL
 
 # Create JAAS configuration file for Kafka
@@ -28,7 +27,6 @@ KafkaServer {
   user_admin="admin"
   user_user="user";
 };
-
 EOL
 # Export JAAS configuration file location
 export KAFKA_OPTS="-Djava.security.auth.login.config=/home/kafka/kafka_jaas.conf"
