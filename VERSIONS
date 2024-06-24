@@ -3,4 +3,4 @@ KAFKA_VERSION=3.3.1
 SCALA_VERSION=2.13
 
 # Bump this revision to release a new version.
-RELEASE_REVISION=8
+RELEASE_REVISION=20

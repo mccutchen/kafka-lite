@@ -6,7 +6,7 @@ FROM alpine:3.16
 # Scala versions with which they are built.
 ARG KAFKA_VERSION
 ARG SCALA_VERSION
-ARG KAFKA_TARBALL=https://downloads.apache.org/kafka/${KAFKA_VERSION}/kafka_${SCALA_VERSION}-${KAFKA_VERSION}.tgz
+ARG KAFKA_TARBALL=https://archive.apache.org/dist/kafka/${KAFKA_VERSION}/kafka_${SCALA_VERSION}-${KAFKA_VERSION}.tgz
 
 RUN apk add --no-cache bash curl openjdk17-jre-headless supervisor \
     && mkdir -p /opt/kafka \
@@ -18,7 +18,8 @@ ENV PATH=/opt/kafka/bin:${PATH}
 # echo "00000000-0000-0000-0000-000000000000" | base64 | cut -b 1-22
 ENV KAFKA_CLUSTER_ID=MDAwMDAwMDAtMDAwMC0wMD \
     KAFKA_DATA_DIR=/var/lib/kafka/data \
-    KAFKA_PORT=9092 \
+    KAFKA_NOAUTH_PORT=9092 \
+    KAFKA_PORT=9093 \
     ZOOKEEPER_DATA_DIR=/var/lib/zookeeper/data \
     ZOOKEEPER_PORT=2181 \
     LOG_DIR=/var/log/kafka
@@ -45,6 +46,7 @@ VOLUME ${ZOOKEEPER_DATA_DIR}
 
 EXPOSE ${KAFKA_PORT}
 EXPOSE ${ZOOKEEPER_PORT}
+EXPOSE ${KAFKA_NOAUTH_PORT}
 
 USER kafka
 CMD ["./start-kafka-lite.sh"]
