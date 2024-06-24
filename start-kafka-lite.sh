@@ -15,6 +15,7 @@ super.users=User:admin
 sasl.enabled.mechanisms=PLAIN
 security.inter.broker.protocol=SASL_PLAINTEXT
 sasl.mechanism.inter.broker.protocol=PLAIN
+allow.everyone.if.no.acl.found=true
 EOL
 
 # Create JAAS configuration file for Kafka
