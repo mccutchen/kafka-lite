@@ -10,26 +10,24 @@ log.dirs=$KAFKA_DATA_DIR
 offsets.topic.replication.factor=1
 transaction.state.log.replication.factor=1
 transaction.state.log.min.isr=1
+
+# enable SASL authenticated listener and unauthenticated listener
 listeners=SASL_PLAINTEXT://:$KAFKA_PORT,PLAINTEXT://:$KAFKA_NOAUTH_PORT
-super.users=User:admin
+
+# configure SASL authentication with "admin" and "user" users
 sasl.enabled.mechanisms=PLAIN
-security.inter.broker.protocol=SASL_PLAINTEXT
-sasl.mechanism.inter.broker.protocol=PLAIN
+listener.security.protocol.map=SASL_PLAINTEXT:SASL_PLAINTEXT,PLAINTEXT:PLAINTEXT
+listener.name.sasl_plaintext.plain.sasl.enabled.mechanisms=PLAIN
+listener.name.sasl_plaintext.plain.sasl.jaas.config=org.apache.kafka.common.security.plain.PlainLoginModule required \
+    username="admin" \
+    password="admin" \
+    user_admin="admin" \
+    user_user="user";
+super.users=User:admin
+
+# allow anonymous users full admin permissions during migration period
 allow.everyone.if.no.acl.found=true
 EOL
-
-# Create JAAS configuration file for Kafka
-cat > ./kafka_jaas.conf <<EOL
-KafkaServer {
-  org.apache.kafka.common.security.plain.PlainLoginModule required
-  username="admin"
-  password="admin"
-  user_admin="admin"
-  user_user="user";
-};
-EOL
-# Export JAAS configuration file location
-export KAFKA_OPTS="-Djava.security.auth.login.config=/home/kafka/kafka_jaas.conf"
 
 cat > ./zookeeper.properties <<EOL
 cluster.id=$KAFKA_CLUSTER_ID
